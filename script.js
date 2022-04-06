@@ -5,36 +5,46 @@ let listGames = $("#listGames"); //Aqui pego o elemento html ID da minha lista.
 $(document).ready(function () {
   //chamada padrão jquery para entrar na função ao carregar completamente a pagina
   $(window).keydown(function (event) {
-    //13 = enter. previne de propagar o enter. cancela o enter
     if (event.keyCode == 13) {
+      //13 = enter. previne de propagar o enter. cancela o enter
       event.preventDefault();
       return false;
     }
   });
-  for (let i = 0; i < 100; i++) {
-    //iterando sobre cada item da lista de jogos
-    let str = `
-      <li class="itemGame">
-        <div class="tag">
-          Posição: ${myJson[i].Rank}<br>
-        </div><br>
-        <div class="tag-name">Nome:</div> ${myJson[i].Name}<br>
-        <div class="tag-name">Plataforma:</div> ${myJson[i].Platform}<br>
-        <div class="tag-name">Ano:</div> ${myJson[i].Year}<br>
-        <div class="tag-name">Gênero:</div> ${myJson[i].Genre}<br>
-        <div class="tag-name">Fabricante:</div> ${myJson[i].Publisher}<br>
-        <div class="tag-name">Vendas nos EUA:</div> ${myJson[i].NA_Sales}<br>
-        <div class="tag-name">Vendas na Europa:</div> ${myJson[i].EU_Sales}<br>
-        <div class="tag-name">Vendas no Japão:</div> ${myJson[i].JP_Sales}<br>
-        <div class="tag-name">Outras Vendas:</div> ${myJson[i].Other_Sales}<br>
-        <div class="tag-name">Vendas Globais:</div> ${myJson[i].Global_Sales}<br><br>
-      </li>  
-    `;
-    document.getElementById("listGames").innerHTML += str; //+= concatena texto com os templates strings
-  }
+
+  // exemplos da biblioteca : https://pagination.js.org/
+  $("#list").pagination({
+    // executa a bliblioteca do JS pagination, definindo o ID "list" como div base para renderização
+
+    dataSource: myJson, // faz referencia ao meu JSON contendo a "base de dados"
+    pageSize: 9, // define a qtde de itens por página na tela
+    callback: function (data, pagination) {
+      // executa a paginação
+      var wrapper = $("#list .wrapper").empty(); // limpa a lista antes de popular novamente
+      $.each(data, function (i, f) {
+        let str = `
+            <li class="itemGame">
+              <div class="tag">
+                Posição: ${f.Rank}<br>
+              </div><br>
+              <div class="tag-name">Nome:</div> ${f.Name}<br>
+              <div class="tag-name">Plataforma:</div> ${f.Platform}<br>
+              <div class="tag-name">Ano:</div> ${f.Year}<br>
+              <div class="tag-name">Gênero:</div> ${f.Genre}<br>
+              <div class="tag-name">Fabricante:</div> ${f.Publisher}<br>
+              <div class="tag-name">Vendas nos EUA:</div> ${f.NA_Sales}<br>
+              <div class="tag-name">Vendas na Europa:</div> ${f.EU_Sales}<br>
+              <div class="tag-name">Vendas no Japão:</div> ${f.JP_Sales}<br>
+              <div class="tag-name">Outras Vendas:</div> ${f.Other_Sales}<br>
+              <div class="tag-name">Vendas Globais:</div> ${f.Global_Sales}<br><br>
+            </li>  
+          `;
+        $("#list #listGames .wrapper ").append(str); // adiciona os itens HTML criados acima para o HTML
+      });
+    },
+  });
 
   $("#btnSearch").click(function () {
-    $("#listGames").empty(); //esvaziar a lista
     let texto = $("#searchInput").val().toLowerCase(); //val é abreviação para value. pegando a string e transformando em caixa baixa
     const stringFiltrada = myJson.filter((string) => {
       //filtrando o array myJson por uma string
@@ -43,64 +53,91 @@ $(document).ready(function () {
         string.Platform.toString().toLowerCase().includes(texto)
       );
     });
-    // console.log(typeof stringFiltrada);
-    const htmlStringLista = stringFiltrada.map((stringFiltrada) => {
-      //mapeia linha por linha do retorno. vincula ao item e nao ao total de itens do array
-      return `
-            <li class="itemGame">
-              <div class="tag">            
-                Posição: ${stringFiltrada.Rank}<br>
+
+    $("#list").pagination({
+      dataSource: stringFiltrada, // aponta para array com dados filtrados na busca
+      pageSize: 9,
+      callback: function (data, pagination) {
+        var wrapper = $("#list .wrapper").empty();
+        $.each(data, function (i, f) {
+          let str = `
+              <li class="itemGame">
+                <div class="tag">            
+                  Posição: ${f.Rank}<br>
               </div><br>
-              <div class="tag-name"> Nome:</div> ${stringFiltrada.Name}<br>
-              <div class="tag-name"> Plataforma:</div> ${stringFiltrada.Platform}<br>
-              <div class="tag-name"> Ano:</div> ${stringFiltrada.Year}<br>
-              <div class="tag-name"> Gênero:</div> ${stringFiltrada.Genre}<br>
-              <div class="tag-name"> Fabricante:</div> ${stringFiltrada.Publisher}<br>
-              <div class="tag-name"> Vendas na America do Norte:</div> ${stringFiltrada.NA_Sales}<br>
-              <div class="tag-name"> Vendas na Europa:</div> ${stringFiltrada.EU_Sales}<br>
-              <div class="tag-name"> Vendas no Japão:</div> ${stringFiltrada.JP_Sales}<br>
-              <div class="tag-name"> Outras Vendas:</div> ${stringFiltrada.Other_Sales}<br>
-              <div class="tag-name"> Vendas Globais:</div> ${stringFiltrada.Global_Sales}<br>
-            </li>
-        `;
+              <div class="tag-name"> Nome:</div> ${f.Name}<br>
+              <div class="tag-name"> Plataforma:</div> ${f.Platform}<br>
+              <div class="tag-name"> Ano:</div> ${f.Year}<br>
+              <div class="tag-name"> Gênero:</div> ${f.Genre}<br>
+              <div class="tag-name"> Fabricante:</div> ${f.Publisher}<br>
+              <div class="tag-name"> Vendas na America do Norte:</div> ${f.NA_Sales}<br>
+              <div class="tag-name"> Vendas na Europa:</div> ${f.EU_Sales}<br>
+              <div class="tag-name"> Vendas no Japão:</div> ${f.JP_Sales}<br>
+              <div class="tag-name"> Outras Vendas:</div> ${f.Other_Sales}<br>
+              <div class="tag-name"> Vendas Globais:</div> ${f.Global_Sales}<br>
+            </li>  
+            `;
+          $("#list #listGames .wrapper ").append(str);
+        });
+      },
     });
-    // .join("<br><br>"); //ao final de cada card quebra 02 linhas.
-    console.log(Array.isArray(htmlStringLista));
-    // console.log(typeof htmlStringLista);
-    // console.log(htmlStringLista);
-    listGames.html(htmlStringLista); //o .htlm é o innerHTML do jquery. esta escrevendo o html da tela.
   });
 });
 
-let slideIndex = 1;
-showSlides(slideIndex);
+$(document).ready(function () {
+  let asideBarList = myJson.slice(Math.max(myJson.length - 5, 1));
 
-// Next/previous controls
-function plusSlides(n) {
-  showSlides((slideIndex += n));
-}
+  $.each(asideBarList, function (i, f) {
+    let str = `
+          <li class="related-post">
+          <div class="bs-example">
+            <a class="top-link" href="#gameModal${f.Rank}" data-toggle="modal">
+              <img class="topgames" src="images/related-images/${f.Game_Photo}"
+                alt="${f.Name}" width="100" height="100" />
+            </a>
+            <div id="gameModal${f.Rank}" class="modal fade">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" rank_id=${f.Rank} data-dismiss="modal" aria-hidden="true">X
+                    </button>
+                    <h4 class="modal-title">${f.Name}</h4>
+                  </div>
+                  <div class="modal-body">
+                    <iframe id="${f.Rank}" width="560" height="315" src="${f.Game_URL}"
+                      title="YouTube video player" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen>
+                    </iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="related-game">${f.Name}<br>
+                Gênero: ${f.Genre}<br>
+                Ano de Lançamento: ${f.Year}<br>
+                Plataforma: ${f.Platform}<br><br>
+              </p>
+            </div>
+          </div>
+        </li>  
+      `;
+    $("#relatedList").append(str);
 
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides((slideIndex = n));
-}
+    let modalUrl = $(`#${f.Rank}`).attr("src");
+    $(`#gameModal${f.Rank}`).on("hide.bs.modal", function () {
+      $(`#${f.Rank}`).attr("src", "");
+    });
+    $(`#gameModal${f.Rank}`).on("show.bs.modal", function () {
+      $(`#${f.Rank}`).attr("src", modalUrl);
+    });
+  });
+});
 
-function showSlides(n) {
-  let i;
-  const slides = document.getElementsByClassName("mySlide");
-  const dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {
-    slideIndex = 1;
-  }
-  if (n < 1) {
-    slideIndex = slides.length;
-  }
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex - 1].style.display = "block";
-  dots[slideIndex - 1].className += " active";
-}
+$(function () {
+  $(".close").click(function () {
+    let closeId = $(this).attr("rank_id");
+    $(`#${closeId}`).attr("src", $(`#${closeId}`).attr("src"));
+  });
+});
