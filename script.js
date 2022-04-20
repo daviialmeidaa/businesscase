@@ -26,15 +26,15 @@ $(document).ready(function () {
             <li class="itemGame">
               <div class="tag">
                 Posição: ${f.Rank}<br>
-              </div><br>
-              <div class="tag-name">Nome:</div> ${f.Name}<br>
-              <div class="tag-name">Plataforma:</div> ${f.Platform}<br>
-              <div class="tag-name">Ano:</div> ${f.Year}<br>
-              <div class="tag-name">Gênero:</div> ${f.Genre}<br>
-              <div class="tag-name">Fabricante:</div> ${f.Publisher}<br>
-              <div class="tag-name">Vendas nos EUA:</div> ${f.NA_Sales}<br>
-              <div class="tag-name">Vendas na Europa:</div> ${f.EU_Sales}<br>
-              <div class="tag-name">Vendas no Japão:</div> ${f.JP_Sales}<br>
+                </div><br>
+                <div class="tag-name">Nome:</div> ${f.Name}<br>
+                <div class="tag-name">Plataforma:</div> ${f.Platform}<br>
+                <div class="tag-name">Ano:</div> ${f.Year}<br>
+                <div class="tag-name">Gênero:</div> ${f.Genre}<br>
+                <div class="tag-name">Fabricante:</div> ${f.Publisher}<br>
+                <div class="tag-name">Vendas nos EUA:</div> ${f.NA_Sales}<br>
+                <div class="tag-name">Vendas na Europa:</div> ${f.EU_Sales}<br>
+                <div class="tag-name">Vendas no Japão:</div> ${f.JP_Sales}<br>
               <div class="tag-name">Outras Vendas:</div> ${f.Other_Sales}<br>
               <div class="tag-name">Vendas Globais:</div> ${f.Global_Sales}<br><br>
             </li>  
